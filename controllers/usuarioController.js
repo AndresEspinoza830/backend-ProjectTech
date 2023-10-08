@@ -22,12 +22,6 @@ const registrarUsuario = async (req, res) => {
       .isLength({ min: 6 })
       .withMessage("El password debe tener minimo 6 caracteres")
       .run(req);
-    // await check("repetir-password")
-    //   .notEmpty()
-    //   .withMessage("El campo no puede ir vacio")
-    //   .equals(req.body.password)
-    //   .withMessage("Los password no son iguales")
-    //   .run(req);
 
     let resultado = validationResult(req);
 
@@ -106,8 +100,6 @@ const olvidePassword = async (req, res) => {
     usuario.token = generarToken();
     await usuario.save();
 
-    console.log(usuario);
-
     //Enviamos el correo para valdiar la cuenta
     await emailRecuperarPassword(
       usuario.username,
@@ -126,12 +118,13 @@ const comprobarToken = async (req, res) => {
   const { token } = req.params;
   try {
     //validando el token
-    const usuario = await Usuario.findOne({ token });
+    const usuario = await Usuario.findOne({ token: token });
 
     //Si no existe el usuario con el token
     if (!usuario) {
-      return res.status(401).json({ mensaje: "Token no valido!" });
+      return res.status(401).json({ mensaje: "Acceso no autorizado!" });
     }
+    return res.status(200).json({ mensaje: "Token valido" });
   } catch (error) {
     console.log("Hubo un error", error);
     res.status(500).json({ mensaje: "Hubo un error en el servidor" });
@@ -204,20 +197,22 @@ const autenticar = async (req, res) => {
     }
 
     //Generar JWT
-    res.status(200).json({
-      _id: usuario._id,
-      nombre: usuario.username,
-      email: usuario.email,
-      token: generarJWT(usuario._id), //este token no se almacena en la base de datos, solo nos sirve para tener rutas protegidas
-    });
+    const token = generarJWT(usuario._id, usuario.username);
+
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+      })
+      .status(200)
+      .json({
+        id: usuario._id,
+        username: usuario.username,
+        email: usuario.email,
+      });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: "Hubo un error en el servidor" });
   }
-};
-
-const perfil = (req, res) => {
-  res.json(req.usuario);
 };
 
 export {
@@ -227,5 +222,4 @@ export {
   olvidePassword,
   comprobarToken,
   nuevoPassword,
-  perfil,
 };

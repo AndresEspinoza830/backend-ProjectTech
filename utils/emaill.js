@@ -16,9 +16,9 @@ const emailRegistroPassword = async (username, email, token) => {
     subject: username, // Subject line
     text: "Confirmacion de Cuenta", // plain text body
     html: `
-        <p>Hola ${username}!, comprueba tu cuenta en Bienes Raices</p>
+        <p>Hola ${username}!, comprueba tu cuenta en Project Tech</p>
         <p>Tu cuenta ya esta lista, solo debes confirmarla en el siguiente enlace:</p>
-        <a href="${process.env.BACKEND_URL}/auth/confirmar/${token}">Confirmar Cuenta</a>
+        <a href="${process.env.FRONTEND_URL}/confirmar/${token}">Confirmar Cuenta</a>
 
         <p>Si tu no creaste esta cuenta, puedes ignorar el mensaje</p>
 
@@ -27,6 +27,7 @@ const emailRegistroPassword = async (username, email, token) => {
 };
 
 const emailRecuperarPassword = async (username, email, token) => {
+  // TODO: Mover hacia variables de entorno
   const transport = nodemailer.createTransport({
     host: process.env.MAILTRAP_HOST,
     port: process.env.MAILTRAP_PORT,
@@ -40,12 +41,12 @@ const emailRecuperarPassword = async (username, email, token) => {
     from: "BienesRaices.com", // sender address
     to: email, // list of receivers
     subject: username, // Subject line
-    text: "Recuperacion de Password", // plain text body
+    text: "Reestablecer de Password", // plain text body
     html: `
-        <p>Hola ${username}!, recupera tu password dando click al enlace:</p>
-        <a href="${process.env.BACKEND_URL}/auth/olvide-password/${token}">Recuperar Password</a>
+        <p>Hola ${username}!, reestablece tu password Project Tech dando click al enlace:</p>
+        <a href="${process.env.FRONTEND_URL}/olvide-password/${token}">Reestablece Password</a>
 
-        <p>Si tu no creaste esta cuenta, puedes ignorar el mensaje</p>
+        <p>Si no fuiste tu, ignora este mensaje</p>
 
     `,
   });

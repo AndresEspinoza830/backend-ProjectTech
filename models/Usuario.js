@@ -24,6 +24,7 @@ const schemaUsuario = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    productos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Producto" }],
   },
   {
     timestamps: true,
