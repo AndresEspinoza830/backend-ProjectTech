@@ -9,6 +9,9 @@ import cookieParser from "cookie-parser";
 //Rutas
 import usuarioRoutes from "./routes/usuarioRoutes.js";
 import productoRoutes from "./routes/productoRoutes.js";
+import categoriaRoutes from "./routes/categoriaRoutes.js";
+import stripeRoutes from "./routes/stripeRoutes.js";
+
 import conexionDB from "./config/db.js";
 
 //Variable contiene toda la informacion de express
@@ -20,13 +23,13 @@ await conexionDB();
 // Habilitar CORS
 const whitelist = [process.env.FRONTEND_URL];
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("Error de CORS"));
-    }
-  },
+  // origin: function (origin, callback) {
+  //   if (whitelist.includes(origin)) {
+  //     callback(null, true);
+  //   } else {
+  //     callback(new Error("Error de CORS"));
+  //   }
+  // },
   credentials: true,
 };
 
@@ -42,6 +45,8 @@ app.use(express.urlencoded({ extended: true }));
 //Routing
 app.use("/auth", usuarioRoutes);
 app.use("/productos", productoRoutes);
+app.use("/categorias", categoriaRoutes);
+app.use("/api", stripeRoutes);
 
 const PORT = 8800;
 app.listen(PORT, () => {

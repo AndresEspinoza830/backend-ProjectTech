@@ -1,9 +1,24 @@
 import Producto from "../models/Producto.js";
-import Categoria from "../models/Categoria.js";
+import { uploadImage } from "../config/cloudinary.js";
 
 const crearProducto = async (req, res) => {
+  const { nombre, descripcion, categoria, precio } = req.body;
   try {
-    const producto = await Producto.create(req.body);
+    const producto = new Producto({
+      nombre,
+      descripcion,
+      categoria,
+      precio,
+    });
+    console.log(req.files.imagen.tempFilePath);
+
+    if (req.files?.imagen) {
+      const result = await uploadImage(req.files.imagen.tempFilePath);
+      producto.imagen.public_id = result.public_id;
+      producto.imagen.secure_url = result.secure_url;
+    }
+
+    await producto.save();
     res.status(200).json(producto);
   } catch (error) {
     console.log(error);
@@ -25,6 +40,8 @@ const listarProductosDestacados = async (req, res) => {
 const listarProductos = async (req, res, next) => {
   const { buscar, categoria, precio } = req.query;
   const query = {};
+
+  console.log(req.files);
 
   if (buscar) {
     query.nombre = new RegExp(buscar, "i");
@@ -53,7 +70,8 @@ const listarProductos = async (req, res, next) => {
 const consultarProducto = async (req, res, next) => {
   const { idProducto } = req.params;
   try {
-    const producto = await Producto.findOne({ _id: idProducto })
+    // const objectId = mongoose.Types.ObjectId(idProducto);
+    const producto = await Producto.findById(idProducto)
       .populate("categoria", " -createdAt -updatedAt -__v")
       .select("-createdAt -updatedAt -__v");
     res.status(200).json(producto);
@@ -63,30 +81,9 @@ const consultarProducto = async (req, res, next) => {
   }
 };
 
-const crearCategoria = async (req, res, next) => {
-  try {
-    const categoria = await Categoria.create(req.body);
-    res.status(200).json(categoria);
-  } catch (error) {
-    console.log(error);
-    next();
-  }
-};
-
-const listarCategorias = async (req, res) => {
-  try {
-    const categorias = await Categoria.find({});
-    return res.status(200).json(categorias);
-  } catch (error) {
-    console.log(error);
-  }
-};
-
 export {
   crearProducto,
   listarProductosDestacados,
   listarProductos,
-  crearCategoria,
-  listarCategorias,
   consultarProducto,
 };

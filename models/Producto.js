@@ -17,7 +17,8 @@ const productSchema = new mongoose.Schema(
       type: Number,
     },
     imagen: {
-      type: String,
+      public_id: String,
+      secure_url: String,
     },
     destacado: {
       type: Boolean,
