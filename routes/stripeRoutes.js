@@ -1,28 +1,9 @@
 import { Router } from "express";
-import Stripe from "stripe";
+import { createSession } from "../controllers/stripeController.js";
 
 const router = Router();
 
-router.post("/checkout", async (req, res) => {
-  const { id, amount } = req.body;
-  try {
-    const stripe = new Stripe(process.env.STRIPE_API_KEY_PRIVATE);
-
-    const payment = await stripe.paymentIntents.create({
-      amount,
-      currency: "USD",
-      description: "Redes WI-FI",
-      payment_method: id,
-      confirm: true,
-      return_url: process.env.FRONTEND_URL + "/home",
-    });
-
-    console.log(payment);
-    res.send({ msg: "Seccesfll payment" });
-  } catch (error) {
-    console.log(error);
-    res.json(error);
-  }
-});
+router.post("/create-checkout-session", createSession);
+router.get("/cancel", (req, res) => res.send("Cancel"));
 
 export default router;

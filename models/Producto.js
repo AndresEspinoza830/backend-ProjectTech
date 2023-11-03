@@ -20,6 +20,10 @@ const productSchema = new mongoose.Schema(
       public_id: String,
       secure_url: String,
     },
+    pdf: {
+      normal: String,
+      blur: String,
+    },
     destacado: {
       type: Boolean,
       default: false,

@@ -181,6 +181,8 @@ const autenticar = async (req, res) => {
       return res.status(400).json({ mensaje: "No existe el usuario" });
     }
 
+    console.log(usuario);
+
     //Verficar el password
     const verificarPassword = await bcrypt.compare(
       req.body.password,
@@ -197,7 +199,12 @@ const autenticar = async (req, res) => {
     }
 
     //Generar JWT
-    const token = generarJWT(usuario._id, usuario.username);
+    const token = generarJWT(
+      usuario._id,
+      usuario.username,
+      usuario.email,
+      usuario.productos
+    );
 
     res
       .cookie("token", token, {
@@ -208,10 +215,27 @@ const autenticar = async (req, res) => {
         id: usuario._id,
         username: usuario.username,
         email: usuario.email,
+        productos: usuario.productos,
       });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ error: "Hubo un error en el servidor" });
+  }
+};
+
+const mostrarProductosCliente = async (req, res) => {
+  const { idCliente } = req.params;
+  try {
+    const cliente = await Usuario.findById(idCliente).populate(
+      "productos",
+      "-createdAt -updatedAt -__v"
+    );
+
+    if (!cliente) return res.status(404).json({ msg: "No existe el usuario" });
+
+    return res.status(200).json(cliente.productos);
+  } catch (error) {
+    console.log(error);
   }
 };
 
@@ -222,4 +246,5 @@ export {
   olvidePassword,
   comprobarToken,
   nuevoPassword,
+  mostrarProductosCliente,
 };

@@ -6,6 +6,7 @@ import {
   olvidePassword,
   comprobarToken,
   nuevoPassword,
+  mostrarProductosCliente,
 } from "../controllers/usuarioController.js";
 import { verifyToken } from "../middleware/verifyToken.js";
 
@@ -25,12 +26,14 @@ router.get("/recuperar-password/:token", comprobarToken);
 
 router.post("/recuperar-password/:token", nuevoPassword);
 
-router.get("/user", verifyToken, (req, res) => {
-  const { _id, username, email } = req.user;
-  return res.status(200).json({ _id, username, email });
-});
-
 //Login usuario
 router.post("/login", autenticar);
+
+router.get("/user", verifyToken, (req, res) => {
+  const { id, username, email, productos } = req.user;
+  return res.status(200).json({ id, username, email, productos });
+});
+
+router.get("/mis-productos/:idCliente", mostrarProductosCliente);
 
 export default router;

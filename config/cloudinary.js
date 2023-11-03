@@ -7,8 +7,12 @@ cloudinary.config({
   secure: true,
 });
 
-export const uploadImage = async (filePath) => {
+export const uploadImages = async (filePath) => {
   return await cloudinary.uploader.upload(filePath, {
     folder: "project",
   });
+};
+
+export const deleteImage = async (publicId) => {
+  return await cloudinary.uploader.destroy(publicId);
 };
