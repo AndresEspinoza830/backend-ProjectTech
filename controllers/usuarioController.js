@@ -209,6 +209,7 @@ const autenticar = async (req, res) => {
     res
       .cookie("token", token, {
         httpOnly: true,
+        expire: "1h",
       })
       .status(200)
       .json({
