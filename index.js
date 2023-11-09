@@ -23,10 +23,11 @@ await conexionDB();
 
 // Habilitar CORS
 const whitelist = [
-  "http://localhost:5173",
+  // "http://localhost:5173",
+  "https://profound-kitsune-bac623.netlify.app",
   "https://dashboard.stripe.com",
   "https://dashboard.stripe",
-  "htpp://localhost:8800",
+  // "htpp://localhost:8800",
 ];
 
 const corsOptions = {
@@ -39,9 +40,9 @@ const corsOptions = {
 
   //     callback(new Error("Error de CORS"));
   //   }
-  // },-------------------------------------------------------------
+  // },
   origin: true,
-  methods: "POST",
+  // methods: "POST",
   credentials: true,
 };
 
