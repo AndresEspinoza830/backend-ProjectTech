@@ -31,17 +31,17 @@ const whitelist = [
 ];
 
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.includes(origin)) {
-      callback(null, true);
-      console.log(origin);
-    } else {
-      console.log(`Hubo un error en CORS: ${origin}`);
+  // origin: function (origin, callback) {
+  //   if (whitelist.includes(origin)) {
+  //     callback(null, true);
+  //     console.log(origin);
+  //   } else {
+  //     console.log(`Hubo un error en CORS: ${origin}`);
 
-      callback(new Error("Error de CORS"));
-    }
-  },
-  // origin: true,
+  //     callback(new Error("Error de CORS"));
+  //   }
+  // },
+  origin: true,
   // methods: "POST",
   credentials: true,
 };
