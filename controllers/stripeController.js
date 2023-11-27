@@ -22,7 +22,7 @@ const createSession = async (req, res) => {
       },
     ],
     mode: "payment",
-    success_url: "http://localhost:5173/compra-exitosa",
+    success_url: "https://profound-kitsune-bac623.netlify.app/compra-exitosa",
     cancel_url: "http://localhost:8800/api/cancel",
   });
   return res.json(session);
