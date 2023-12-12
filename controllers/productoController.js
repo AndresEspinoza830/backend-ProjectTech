@@ -112,7 +112,7 @@ const consultarProducto = async (req, res, next) => {
   try {
     const producto = await Producto.findById(idProducto)
       .populate("categoria", " -createdAt -updatedAt -__v")
-      .select("-createdAt -updatedAt -__v");
+      .select("-createdAt -__v");
     res.status(200).json(producto);
   } catch (error) {
     console.log(error);
